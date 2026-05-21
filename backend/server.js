@@ -73,11 +73,30 @@ function authMiddleware(req, res, next) {
 app.post('/api/register', async (req, res) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password)
+    const emailRegex =
+/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!emailRegex.test(email)) {
+
+  return res.status(400).json({
+    message: 'Invalid email address'
+  });
+
+}
     return res.status(400).json({ message: 'All fields required' });
   if (username.length < 3)
     return res.status(400).json({ message: 'Username must be at least 3 characters' });
-  if (password.length < 6)
-    return res.status(400).json({ message: 'Password must be at least 6 characters' });
+ const strongPassword =
+/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+if (!strongPassword.test(password)) {
+
+  return res.status(400).json({
+    message:
+      'Password must contain uppercase, lowercase, number and minimum 8 characters'
+  });
+
+}
   if (users.has(username.toLowerCase()))
     return res.status(409).json({ message: 'Username already taken' });
 
@@ -89,11 +108,14 @@ app.post('/api/register', async (req, res) => {
 
 // Login
 app.post('/api/login', async (req, res) => {
-  const { username, password } = req.body;
+  const { email , password } = req.body;
+
   if (!username || !password)
     return res.status(400).json({ message: 'Username and password required' });
 
-  const user = users.get(username.toLowerCase());
+  const user = [...users.values()].find(
+  u => u.email === email
+);
   if (!user) return res.status(401).json({ message: 'Invalid username or password' });
 
   const match = await bcrypt.compare(password, user.passwordHash);
