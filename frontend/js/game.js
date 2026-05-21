@@ -19,6 +19,8 @@ class GameController {
     this.aiColor = this.playerSide === 'w' ? 'b' : 'w';
     this.moveCount = { w: 0, b: 0 };
     this.soundEnabled = this.params.sound !== '0';
+    this.socket = null;
+this.roomId = this.params.room || null;
 
     this.sounds.setEnabled(this.soundEnabled);
     if (this.params.diff) this.ai.setDifficulty(parseInt(this.params.diff));
@@ -43,7 +45,9 @@ class GameController {
     this.gameActive = true;
     this.refreshBoard();
     this._updateStatus();
-
+if (this.mode === 'online') {
+  this._connectWebSocket();
+}
     // If player is black, AI moves first
     if (this.mode === 'computer' && this.playerSide === 'b') {
       setTimeout(() => this._doAiMove(), 600);
@@ -174,6 +178,28 @@ class GameController {
     this._updateMoveHistory();
     this._updateCaptured();
     this._updateActivePlayer();
+    if (this.mode === 'online' && this.socket) {
+
+  const lastMove =
+    this.engine.moveHistory[
+      this.engine.moveHistory.length - 1
+    ];
+
+  this.socket.send(JSON.stringify({
+
+    type: 'move',
+
+    move: {
+
+      from: lastMove.fromNotation,
+
+      to: lastMove.toNotation
+
+    }
+
+  }));
+
+}
 
     if (this.gameActive && result.gameOver || result.checkmate || result.draw) {
       this.gameActive = false;
@@ -340,6 +366,88 @@ class GameController {
     this._showGameOver(`You resigned. ${oppName} wins.`, '⚑ Resigned');
     this.sounds.gameOver();
   }
+  _connectWebSocket() {
+
+  const session =
+    JSON.parse(localStorage.getItem('chess_session'));
+
+  this.socket =
+    new WebSocket('wss://chess-online-1-n2xg.onrender.com');
+
+  this.socket.onopen = () => {
+
+    console.log('Connected To Server');
+
+    this.socket.send(JSON.stringify({
+
+      type: 'joinRoom',
+
+      roomId: this.roomId,
+
+      token: session.token
+
+    }));
+
+  };
+
+  this.socket.onmessage = (event) => {
+
+    const data = JSON.parse(event.data);
+
+    console.log(data);
+
+    switch (data.type) {
+
+      case 'gameStart':
+
+        showToast('Opponent Connected!');
+        break;
+
+      case 'opponentMove':
+
+        this.engine.loadFEN(data.fen);
+
+        this.refreshBoard();
+
+        this._updateMoveHistory();
+
+        this._updateCaptured();
+
+        this._updateStatus();
+
+        break;
+
+      case 'opponentDisconnected':
+
+        this.gameActive = false;
+
+        this._showGameOver(
+          'Opponent disconnected',
+          'Disconnected'
+        );
+
+        break;
+
+      case 'gameOver':
+
+        this.gameActive = false;
+
+        this._showGameOver(
+          data.reason,
+          'Game Over'
+        );
+
+        break;
+    }
+  };
+
+  this.socket.onerror = () => {
+
+    console.log('WebSocket Error');
+
+  };
+
+}
 
   newGame() {
     closeModal('gameOverModal');

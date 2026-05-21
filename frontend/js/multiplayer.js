@@ -2,7 +2,7 @@
    multiplayer.js — Online Multiplayer Lobby
    ===================================================== */
 
-const MP_API = 'http://localhost:3000/api';
+const MP_API = 'https://chess-online-1-n2xg.onrender.com/api';
 
 let selectedCreateTime  = 300;
 let selectedCreateColor = 'white';
