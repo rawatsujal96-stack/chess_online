@@ -60,7 +60,7 @@ async function createRoom() {
     });
     const data = await res.json();
    if (res.ok && data.roomId) {
-
+alert("Room ID: " + data.roomId);
   window.location.href =
   `game.html?mode=online&room=${data.roomId}&color=${color}&time=${selectedCreateTime}`;
 
