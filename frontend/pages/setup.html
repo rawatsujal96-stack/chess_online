@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setup Game — Chess Online</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/auth.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="site-header">
+    <a href="../index.html" class="logo">♟ Chess Online</a>
+    <nav class="site-nav" id="navLinks">
+      <a href="../index.html">Home</a>
+    </nav>
+  </header>
+
+  <main class="setup-main">
+    <div class="setup-card">
+      <h1>⚙ Game Setup</h1>
+
+      <div class="setup-section">
+        <span class="setup-label">Difficulty</span>
+        <div class="diff-selector" id="diffSelector">
+          <button class="diff-btn" data-diff="1" onclick="selectDiff(this)">Easy</button>
+          <button class="diff-btn selected" data-diff="2" onclick="selectDiff(this)">Medium</button>
+          <button class="diff-btn" data-diff="3" onclick="selectDiff(this)">Hard</button>
+        </div>
+      </div>
+
+      <div class="setup-section">
+        <span class="setup-label">Time Control</span>
+        <div class="time-selector" id="timeSelector">
+          <button class="time-btn" data-time="120" onclick="selectTime(this)">2 min</button>
+          <button class="time-btn selected" data-time="300" onclick="selectTime(this)">5 min</button>
+          <button class="time-btn" data-time="600" onclick="selectTime(this)">10 min</button>
+          <button class="time-btn" data-time="900" onclick="selectTime(this)">15 min</button>
+          <button class="time-btn" data-time="1800" onclick="selectTime(this)">30 min</button>
+          <button class="time-btn" data-time="0" onclick="selectTime(this)">∞ No Limit</button>
+        </div>
+      </div>
+
+      <div class="setup-section">
+        <span class="setup-label">Play As</span>
+        <div class="color-selector">
+          <button class="color-btn white-btn selected" data-color="white" onclick="selectColor(this)">♔ White</button>
+          <button class="color-btn black-btn" data-color="black" onclick="selectColor(this)">♚ Black</button>
+          <button class="color-btn random-btn" data-color="random" onclick="selectColor(this)">⚄ Random</button>
+        </div>
+      </div>
+
+      <div class="setup-section">
+        <span class="setup-label">Sound</span>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <input type="checkbox" id="soundToggle" checked style="width:18px;height:18px;cursor:pointer;" />
+          <label for="soundToggle" style="font-size:0.9rem;cursor:pointer;">Enable sound effects</label>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="startGame()">▶ Start Game</button>
+      <a href="../index.html" class="btn btn-outline" style="width:100%;margin-top:10px;display:block;text-align:center;">← Back</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2024 Chess Online</p>
+  </footer>
+
+  <script src="../js/auth.js"></script>
+  <script>
+    let selectedTime = 300;
+    let selectedDiff = 2;
+    let selectedColor = 'white';
+
+    function selectTime(btn) {
+      document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedTime = parseInt(btn.dataset.time);
+    }
+
+    function selectDiff(btn) {
+      document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedDiff = parseInt(btn.dataset.diff);
+    }
+
+    function selectColor(btn) {
+      document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedColor = btn.dataset.color;
+    }
+
+    function startGame() {
+      const sound = document.getElementById('soundToggle').checked ? 1 : 0;
+      let color = selectedColor;
+      if (color === 'random') color = Math.random() < 0.5 ? 'white' : 'black';
+      const params = new URLSearchParams({
+        mode: 'computer',
+        time: selectedTime,
+        diff: selectedDiff,
+        color: color,
+        sound: sound
+      });
+      window.location.href = `game.html?${params.toString()}`;
+    }
+  </script>
+</body>
+</html>

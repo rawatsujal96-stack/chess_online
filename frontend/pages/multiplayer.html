@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multiplayer — Chess Online</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/auth.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="site-header">
+    <a href="../index.html" class="logo">♟ Chess Online</a>
+    <nav class="site-nav" id="navLinks">
+      <a href="../index.html">Home</a>
+      <a href="login.html" id="loginLink">Login</a>
+    </nav>
+  </header>
+
+  <!-- Auth Wall (shown if not logged in) -->
+  <div id="authWall" style="display:none;">
+    <main class="auth-main">
+      <div class="auth-card">
+        <h1>Sign In Required</h1>
+        <p class="sub">You need an account to play online multiplayer.<br/>Guest accounts are also supported.</p>
+        <a href="login.html" class="btn btn-primary" style="display:block;margin-bottom:10px;">Sign In</a>
+        <a href="register.html" class="btn btn-secondary" style="display:block;margin-bottom:10px;">Create Account</a>
+        <div class="divider">or</div>
+        <button class="btn btn-outline" onclick="guestLogin()" style="width:100%;">Continue as Guest</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Lobby (shown if logged in) -->
+  <div id="lobbyWall" style="display:none;">
+    <main class="lobby-main">
+      <h1>⚡ Online Multiplayer</h1>
+      <p class="sub">Welcome, <strong id="lobbyUsername"></strong> &nbsp;·&nbsp; <a href="#" onclick="logout()" style="text-decoration:underline;">Logout</a></p>
+
+      <div class="lobby-grid">
+        <!-- Create Room -->
+        <div class="lobby-card">
+          <h2>Create Room</h2>
+
+          <div class="setup-section">
+            <span class="setup-label">Time Control</span>
+            <div class="time-selector" id="createTimeSelector">
+              <button class="time-btn" data-time="120" onclick="selectCreateTime(this)">2 min</button>
+              <button class="time-btn selected" data-time="300" onclick="selectCreateTime(this)">5 min</button>
+              <button class="time-btn" data-time="600" onclick="selectCreateTime(this)">10 min</button>
+              <button class="time-btn" data-time="900" onclick="selectCreateTime(this)">15 min</button>
+              <button class="time-btn" data-time="1800" onclick="selectCreateTime(this)">30 min</button>
+              <button class="time-btn" data-time="0" onclick="selectCreateTime(this)">∞ No Limit</button>
+            </div>
+          </div>
+
+          <div class="setup-section">
+            <span class="setup-label">Play As</span>
+            <div class="color-selector">
+              <button class="color-btn white-btn selected" data-color="white" onclick="selectCreateColor(this)">♔ White</button>
+              <button class="color-btn black-btn" data-color="black" onclick="selectCreateColor(this)">♚ Black</button>
+              <button class="color-btn random-btn" data-color="random" onclick="selectCreateColor(this)">⚄ Random</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="roomName">Room Name (optional)</label>
+            <input type="text" id="roomName" placeholder="e.g. My Game Room" maxlength="30" />
+          </div>
+
+          <button class="btn btn-primary" style="width:100%;" onclick="createRoom()">Create Room</button>
+        </div>
+
+        <!-- Room List -->
+        <div class="lobby-card">
+          <h2 style="display:flex;justify-content:space-between;align-items:center;">
+            Open Rooms
+            <button class="btn btn-outline" style="padding:4px 12px;font-size:0.78rem;" onclick="refreshRooms()">↻ Refresh</button>
+          </h2>
+
+          <div id="roomListWrap">
+            <p style="color:var(--gray-mid);font-size:0.9rem;" id="noRoomsMsg">No open rooms. Create one!</p>
+            <ul class="room-list" id="roomList"></ul>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <p>© 2024 Chess Online</p>
+  </footer>
+
+  <div id="toast"></div>
+  <script src="../js/auth.js"></script>
+  <script src="../js/multiplayer.js"></script>
+</body>
+</html>

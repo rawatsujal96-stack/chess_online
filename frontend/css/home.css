@@ -1,0 +1,131 @@
+/* =====================================================
+   home.css — Homepage Styles
+   ===================================================== */
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.home-main {
+  flex: 1;
+}
+
+/* ─── Hero ─── */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 64px 80px;
+  background: var(--white);
+  border-bottom: 2px solid var(--gray-light);
+  min-height: calc(100vh - 64px - 56px);
+}
+
+.hero-text {
+  max-width: 480px;
+}
+
+.hero-text h1 {
+  font-family: var(--font-display);
+  font-size: 3.8rem;
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  letter-spacing: -1px;
+}
+
+.hero-text p {
+  font-size: 1.1rem;
+  color: var(--gray-dark);
+  margin-bottom: 36px;
+  line-height: 1.7;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* ─── Decorative Board ─── */
+.hero-board {
+  width: 360px;
+  height: 360px;
+  flex-shrink: 0;
+  border: 4px solid var(--board-border);
+  box-shadow: 8px 8px 0 var(--black);
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  overflow: hidden;
+}
+
+.hero-board .sq {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  user-select: none;
+}
+
+/* ─── Features ─── */
+.features {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 2px solid var(--gray-light);
+}
+
+.feature-card {
+  padding: 40px 32px;
+  border-right: 2px solid var(--gray-light);
+  transition: background 0.18s;
+}
+
+.feature-card:last-child {
+  border-right: none;
+}
+
+.feature-card:hover {
+  background: var(--black);
+  color: var(--white);
+}
+
+.feature-icon {
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 14px;
+}
+
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+}
+
+.feature-card p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  .hero-text h1 { font-size: 2.6rem; }
+  .hero-board { width: 260px; height: 260px; }
+  .hero-buttons { justify-content: center; }
+  .features { grid-template-columns: repeat(2, 1fr); }
+  .feature-card { border-bottom: 2px solid var(--gray-light); }
+}
+
+@media (max-width: 500px) {
+  .features { grid-template-columns: 1fr; }
+  .hero-board { width: 220px; height: 220px; }
+}

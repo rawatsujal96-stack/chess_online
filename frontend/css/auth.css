@@ -1,0 +1,505 @@
+/* =====================================================
+   auth.css — Login / Register / Multiplayer Pages
+   Chess.com-inspired Classical Dark Theme
+   ===================================================== */
+
+/* ─── Chess Background Canvas ─── */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #1a1209;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated chess board background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-conic-gradient(
+      rgba(240, 217, 181, 0.055) 0% 25%,
+      rgba(181, 136, 99, 0.055) 0% 50%
+    );
+  background-size: 72px 72px;
+  z-index: 0;
+  animation: boardShift 90s linear infinite;
+}
+
+/* Deep vignette overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 90% 70% at 50% 50%,
+    rgba(26,18,9,0.4) 0%,
+    rgba(10,7,3,0.85) 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes boardShift {
+  0%   { background-position: 0 0; }
+  100% { background-position: 144px 144px; }
+}
+
+/* ─── Floating Chess Pieces ─── */
+.chess-pieces-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.float-piece {
+  position: absolute;
+  bottom: -100px;
+  opacity: 0;
+  font-size: 5rem;
+  line-height: 1;
+  color: rgba(240, 217, 181, 0.1);
+  animation: floatUp 20s ease-in-out infinite;
+  will-change: transform, opacity;
+  user-select: none;
+}
+
+.float-piece:nth-child(1)  { left: 5%;  font-size: 5.5rem; animation-delay: 0s;    animation-duration: 22s; color: rgba(240,217,181,0.09); }
+.float-piece:nth-child(2)  { left: 18%; font-size: 3.5rem; animation-delay: 3s;    animation-duration: 18s; color: rgba(181,136,99,0.11); }
+.float-piece:nth-child(3)  { left: 32%; font-size: 6.5rem; animation-delay: 7s;    animation-duration: 26s; color: rgba(240,217,181,0.06); }
+.float-piece:nth-child(4)  { left: 48%; font-size: 4.5rem; animation-delay: 1s;    animation-duration: 19s; color: rgba(181,136,99,0.09); }
+.float-piece:nth-child(5)  { left: 62%; font-size: 4rem;   animation-delay: 9s;    animation-duration: 24s; color: rgba(240,217,181,0.08); }
+.float-piece:nth-child(6)  { left: 76%; font-size: 5.5rem; animation-delay: 4s;    animation-duration: 20s; color: rgba(181,136,99,0.1); }
+.float-piece:nth-child(7)  { left: 88%; font-size: 4.5rem; animation-delay: 11s;   animation-duration: 22s; color: rgba(240,217,181,0.07); }
+.float-piece:nth-child(8)  { left: 12%; font-size: 3rem;   animation-delay: 15s;   animation-duration: 27s; color: rgba(181,136,99,0.09); }
+.float-piece:nth-child(9)  { left: 55%; font-size: 3.5rem; animation-delay: 5s;    animation-duration: 17s; color: rgba(240,217,181,0.1); }
+.float-piece:nth-child(10) { left: 40%; font-size: 5rem;   animation-delay: 12s;   animation-duration: 23s; color: rgba(181,136,99,0.07); }
+
+@keyframes floatUp {
+  0%   { opacity: 0; transform: translateY(0) rotate(-6deg) scale(0.85); }
+  8%   { opacity: 1; }
+  88%  { opacity: 0.6; }
+  100% { opacity: 0; transform: translateY(-110vh) rotate(10deg) scale(1.05); }
+}
+
+/* ─── Auth Layout ─── */
+.auth-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Golden accent line above card */
+.auth-main::before {
+  content: '';
+  display: block;
+  height: 2px;
+  width: 48px;
+  background: linear-gradient(90deg, transparent, #b58863, #f0d9b5, #b58863, transparent);
+  margin-bottom: 28px;
+  border-radius: 2px;
+}
+
+/* ─── Auth Card ─── */
+.auth-card {
+  background: rgba(20, 15, 9, 0.82);
+  border: 1px solid rgba(181, 136, 99, 0.32);
+  box-shadow:
+    0 0 0 1px rgba(240, 217, 181, 0.06),
+    0 20px 60px rgba(0, 0, 0, 0.75),
+    0 4px 12px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(240, 217, 181, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 44px 48px;
+  width: 100%;
+  max-width: 440px;
+  position: relative;
+  animation: cardIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Corner ornaments */
+.auth-card::before,
+.auth-card::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: rgba(181, 136, 99, 0.45);
+  border-style: solid;
+}
+.auth-card::before { top: 14px; left: 14px; border-width: 2px 0 0 2px; }
+.auth-card::after  { bottom: 14px; right: 14px; border-width: 0 2px 2px 0; }
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(24px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ─── King icon at top ─── */
+.auth-card-icon {
+  text-align: center;
+  font-size: 2.8rem;
+  margin-bottom: 14px;
+  display: block;
+  animation: piecePulse 4s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(181, 136, 99, 0.5));
+}
+
+@keyframes piecePulse {
+  0%, 100% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 12px rgba(181,136,99,0.5)); }
+  50%       { transform: scale(1.06) translateY(-4px); filter: drop-shadow(0 6px 20px rgba(181,136,99,0.8)); }
+}
+
+.auth-card h1 {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #f0d9b5;
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+.auth-card .sub {
+  color: rgba(240, 217, 181, 0.45);
+  font-size: 0.875rem;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* ─── Form Inputs ─── */
+.auth-card .form-group {
+  margin-bottom: 16px;
+}
+
+.auth-card .form-group label {
+  color: rgba(240, 217, 181, 0.6);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.auth-card .form-group input {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(181, 136, 99, 0.25);
+  color: #f0d9b5;
+  font-size: 0.95rem;
+  padding: 11px 14px;
+  width: 100%;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.auth-card .form-group input::placeholder {
+  color: rgba(240, 217, 181, 0.2);
+}
+
+.auth-card .form-group input:focus {
+  border-color: rgba(181, 136, 99, 0.7);
+  background: rgba(181, 136, 99, 0.07);
+  box-shadow: 0 0 0 3px rgba(181, 136, 99, 0.12);
+}
+
+/* ─── Primary Button ─── */
+.auth-card .btn-primary {
+  background: linear-gradient(160deg, #c49a6c 0%, #8b6343 100%);
+  color: #1a0f06;
+  border: none;
+  font-weight: 800;
+  font-size: 0.9rem;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  padding: 13px 28px;
+  box-shadow:
+    0 4px 20px rgba(181, 136, 99, 0.35),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.auth-card .btn-primary:hover {
+  background: linear-gradient(160deg, #d4aa7a 0%, #9d7251 100%);
+  box-shadow: 0 6px 28px rgba(181, 136, 99, 0.55);
+  transform: translateY(-1px);
+}
+
+.auth-card .btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(181, 136, 99, 0.3);
+}
+
+/* ─── Outline Button ─── */
+.auth-card .btn-outline {
+  background: transparent;
+  color: rgba(240, 217, 181, 0.65);
+  border: 1px solid rgba(181, 136, 99, 0.3);
+  font-size: 0.87rem;
+  letter-spacing: 0.5px;
+  padding: 11px 28px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.auth-card .btn-outline:hover {
+  background: rgba(181, 136, 99, 0.1);
+  border-color: rgba(181, 136, 99, 0.6);
+  color: #f0d9b5;
+}
+
+/* ─── Divider ─── */
+.auth-card .divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 22px 0;
+  color: rgba(240, 217, 181, 0.25);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.auth-card .divider::before,
+.auth-card .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(181, 136, 99, 0.2);
+}
+
+/* ─── Bottom link ─── */
+.auth-bottom {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.84rem;
+  color: rgba(240, 217, 181, 0.35);
+}
+
+.auth-bottom a {
+  color: #b58863;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s;
+}
+
+.auth-bottom a:hover { color: #f0d9b5; }
+
+/* ─── Error messages ─── */
+.auth-card .form-error {
+  color: #e87070 !important;
+}
+
+#regError, #loginError {
+  background: rgba(204, 51, 51, 0.12) !important;
+  border: 1px solid rgba(204, 51, 51, 0.3) !important;
+  padding: 8px 12px;
+  color: #e87070 !important;
+  font-size: 0.87rem !important;
+  font-weight: 600 !important;
+}
+
+/* ─── All buttons full width inside card ─── */
+.auth-card .btn { width: 100%; margin-bottom: 10px; }
+
+/* ─── Header / Footer overrides ─── */
+.auth-page-header {
+  position: relative;
+  z-index: 10;
+  background: rgba(8, 5, 2, 0.92);
+  border-bottom: 1px solid rgba(181, 136, 99, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.auth-page-footer {
+  position: relative;
+  z-index: 2;
+  background: rgba(8, 5, 2, 0.8);
+  border-top: 1px solid rgba(181, 136, 99, 0.12);
+  color: rgba(181, 136, 99, 0.4);
+}
+
+/* ─── Multiplayer Lobby ─── */
+.lobby-main {
+  flex: 1;
+  padding: 32px 48px;
+  position: relative;
+  z-index: 2;
+}
+
+.lobby-main h1 {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #f0d9b5;
+}
+
+.lobby-main .sub {
+  color: rgba(240, 217, 181, 0.45);
+  margin-bottom: 32px;
+}
+
+.lobby-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.lobby-card {
+  background: rgba(20, 15, 9, 0.82);
+  border: 1px solid rgba(181, 136, 99, 0.28);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+  padding: 24px;
+}
+
+.lobby-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(181, 136, 99, 0.18);
+  color: #f0d9b5;
+}
+
+/* ─── Room List ─── */
+.room-list { list-style: none; max-height: 400px; overflow-y: auto; }
+
+.room-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(181, 136, 99, 0.1);
+  gap: 10px;
+}
+.room-item:last-child { border-bottom: none; }
+.room-name { font-weight: 700; font-size: 0.9rem; color: #f0d9b5; }
+.room-meta { font-size: 0.8rem; color: rgba(240, 217, 181, 0.38); }
+.room-badge {
+  display: inline-block; padding: 2px 8px;
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+  background: rgba(181, 136, 99, 0.12); color: #b58863;
+}
+.room-badge.waiting { background: rgba(45, 138, 45, 0.12); color: #5cb85c; }
+.room-item .btn { padding: 6px 14px; font-size: 0.78rem; }
+
+/* ─── Time Selector ─── */
+.time-selector { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+
+.time-btn {
+  padding: 8px 14px;
+  border: 1px solid rgba(181, 136, 99, 0.25);
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: all 0.15s;
+  color: rgba(240, 217, 181, 0.58);
+}
+.time-btn:hover { border-color: #b58863; color: #f0d9b5; background: rgba(181,136,99,0.08); }
+.time-btn.selected { background: linear-gradient(135deg,#b58863,#8b6343); color: #1a0f06; border-color: #b58863; }
+
+/* ─── Difficulty Selector ─── */
+.diff-selector { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+
+.diff-btn {
+  padding: 8px 16px;
+  border: 1px solid rgba(181, 136, 99, 0.25);
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: all 0.15s;
+  color: rgba(240, 217, 181, 0.58);
+}
+.diff-btn:hover { border-color: #b58863; color: #f0d9b5; background: rgba(181,136,99,0.08); }
+.diff-btn.selected { background: linear-gradient(135deg,#b58863,#8b6343); color: #1a0f06; border-color: #b58863; }
+
+/* ─── Game Setup Page ─── */
+.setup-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+  position: relative;
+  z-index: 2;
+  background: transparent;
+}
+
+.setup-card {
+  background: rgba(20, 15, 9, 0.85);
+  border: 1px solid rgba(181, 136, 99, 0.32);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.7), inset 0 1px 0 rgba(240,217,181,0.07);
+  backdrop-filter: blur(14px);
+  padding: 40px 44px;
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+}
+.setup-card::before, .setup-card::after {
+  content: ''; position: absolute;
+  width: 20px; height: 20px;
+  border-color: rgba(181, 136, 99, 0.42); border-style: solid;
+}
+.setup-card::before { top: 12px; left: 12px; border-width: 2px 0 0 2px; }
+.setup-card::after  { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
+
+.setup-card h1 {
+  font-family: var(--font-display);
+  font-size: 1.85rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(181, 136, 99, 0.22);
+  color: #f0d9b5;
+}
+
+.setup-label {
+  font-size: 0.76rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1.2px; color: rgba(240, 217, 181, 0.52);
+  margin-bottom: 8px; display: block;
+}
+.setup-section { margin-bottom: 24px; }
+
+.color-selector { display: flex; gap: 10px; }
+.color-btn {
+  flex: 1; padding: 14px;
+  border: 1px solid rgba(181, 136, 99, 0.25);
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+  font-family: var(--font-body); font-size: 0.9rem; font-weight: 700;
+  text-align: center; transition: all 0.15s; color: rgba(240, 217, 181, 0.65);
+}
+.color-btn:hover { border-color: #b58863; background: rgba(181,136,99,0.1); color: #f0d9b5; }
+.color-btn.white-btn { background: rgba(240,217,181,0.06); }
+.color-btn.black-btn { background: rgba(0,0,0,0.35); }
+.color-btn.selected { border-color: #b58863; border-width: 2px; box-shadow: 0 0 14px rgba(181,136,99,0.28); color: #f0d9b5; }
+
+/* ─── Responsive ─── */
+@media (max-width: 640px) {
+  .lobby-grid { grid-template-columns: 1fr; }
+  .auth-card, .setup-card { padding: 28px 22px; }
+  .lobby-main { padding: 20px 16px; }
+  .float-piece { font-size: 3rem !important; }
+}

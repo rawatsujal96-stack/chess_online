@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chess Online</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/home.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="logo">♟ Chess Online</div>
+    <nav class="site-nav">
+      <a href="index.html">Home</a>
+      <a href="pages/login.html">Login</a>
+      <a href="pages/register.html">Register</a>
+    </nav>
+  </header>
+
+  <main class="home-main">
+    <section class="hero">
+      <div class="hero-text">
+        <h1>Play Chess.<br/>Classic &amp; Clean.</h1>
+        <p>Challenge the computer or compete against players online. No distractions — just pure chess.</p>
+        <div class="hero-buttons">
+          <a href="pages/game.html?mode=computer" class="btn btn-primary">▶ Play vs Computer</a>
+          <a href="pages/multiplayer.html" class="btn btn-secondary">⚡ Online Multiplayer</a>
+        </div>
+      </div>
+      <div class="hero-board" id="decorBoard"></div>
+    </section>
+
+    <section class="features">
+      <div class="feature-card">
+        <span class="feature-icon">🤖</span>
+        <h3>vs Computer</h3>
+        <p>No signup needed. Play instantly against our AI engine with adjustable difficulty.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🌐</span>
+        <h3>Online Multiplayer</h3>
+        <p>Create or join rooms. Play with friends or find opponents worldwide.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">⏱</span>
+        <h3>Time Controls</h3>
+        <p>Choose from 2, 5, 10, 15, 30 minutes or unlimited time per game.</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🎵</span>
+        <h3>Sound Effects</h3>
+        <p>Classic move and capture sounds for an immersive experience.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2024 Chess Online &nbsp;|&nbsp; Classic Chess, Online.</p>
+  </footer>
+
+  <script src="js/decorboard.js"></script>
+</body>
+</html>

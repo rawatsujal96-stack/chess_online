@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chess — Play</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/game.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="site-header">
+    <a href="../index.html" class="logo">♟ Chess Online</a>
+    <nav class="site-nav" id="navLinks">
+      <a href="../index.html">Home</a>
+    </nav>
+  </header>
+
+  <div class="game-layout">
+    <!-- Left: Board + Players -->
+    <div class="game-left">
+      <!-- Top Player (opponent) -->
+      <div class="player-info" id="topPlayer">
+        <div class="player-avatar" id="topAvatar">♚</div>
+        <div class="player-name" id="topName">Computer</div>
+        <div class="player-timer" id="topTimer">—</div>
+      </div>
+
+      <!-- Board -->
+      <div class="board-wrapper">
+        <div class="board-frame">
+          <!-- Rank labels -->
+          <div class="board-ranks" id="rankLabels"></div>
+          <!-- Board -->
+          <div id="chessboard"></div>
+        </div>
+        <!-- File labels -->
+        <div class="board-files" id="fileLabels"></div>
+      </div>
+
+      <!-- Bottom Player (you) -->
+      <div class="player-info active-player" id="bottomPlayer">
+        <div class="player-avatar" id="bottomAvatar">♔</div>
+        <div class="player-name" id="bottomName">You</div>
+        <div class="player-timer" id="bottomTimer">—</div>
+      </div>
+    </div>
+
+    <!-- Right: Info Panel -->
+    <div class="game-right">
+      <div class="game-status" id="gameStatus">Your turn — White</div>
+
+      <div class="panel-section">
+        <h3>Captured (White)</h3>
+        <div class="captured-pieces" id="capturedWhite"></div>
+      </div>
+
+      <div class="panel-section">
+        <h3>Captured (Black)</h3>
+        <div class="captured-pieces" id="capturedBlack"></div>
+      </div>
+
+      <div class="panel-section" style="flex:1; padding:0; overflow:hidden;">
+        <div style="padding:12px 18px 6px; border-bottom:1px solid var(--gray-light);">
+          <h3 style="margin:0;">Move History</h3>
+        </div>
+        <div class="move-history" id="moveHistory">
+          <ol class="move-list" id="moveList"></ol>
+        </div>
+      </div>
+
+      <div class="game-controls">
+        <button class="btn btn-outline" onclick="undoMove()" id="undoBtn">↩ Undo</button>
+        <button class="btn btn-outline" onclick="flipBoard()">⇅ Flip Board</button>
+        <button class="btn btn-danger" onclick="resignGame()">⚑ Resign</button>
+        <button class="btn btn-secondary" onclick="newGame()" id="newGameBtn" style="display:none;">+ New Game</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer" style="padding:10px;">
+    <p>© 2024 Chess Online</p>
+  </footer>
+
+  <!-- Promotion Modal -->
+  <div class="modal-overlay" id="promotionModal">
+    <div class="modal-box">
+      <h2>Pawn Promotion</h2>
+      <p>Choose a piece to promote to:</p>
+      <div class="promotion-grid" id="promotionGrid"></div>
+    </div>
+  </div>
+
+  <!-- Game Over Modal -->
+  <div class="modal-overlay" id="gameOverModal">
+    <div class="modal-box">
+      <h2 id="gameOverTitle">Game Over</h2>
+      <p id="gameOverMsg"></p>
+      <div class="modal-actions">
+        <button class="btn btn-primary" onclick="newGame()">New Game</button>
+        <a href="../index.html" class="btn btn-outline">Home</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resign Confirm Modal -->
+  <div class="modal-overlay" id="resignModal">
+    <div class="modal-box">
+      <h2>Resign?</h2>
+      <p>Are you sure you want to resign this game?</p>
+      <div class="modal-actions">
+        <button class="btn btn-danger" onclick="confirmResign()">Yes, Resign</button>
+        <button class="btn btn-outline" onclick="closeModal('resignModal')">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script src="../js/sounds.js"></script>
+  <script src="../js/chess-engine.js"></script>
+  <script src="../js/board.js"></script>
+  <script src="../js/ai.js"></script>
+  <script src="../js/game.js"></script>
+  <script src="../js/auth.js"></script>
+</body>
+</html>

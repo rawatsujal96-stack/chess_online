@@ -1,0 +1,279 @@
+/* =====================================================
+   style.css — Global Styles
+   Chess Online
+   ===================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --black: #111111;
+  --white: #f8f8f5;
+  --gray-dark: #333333;
+  --gray-mid: #888888;
+  --gray-light: #dddddd;
+  --board-light: #f0d9b5;
+  --board-dark: #b58863;
+  --board-border: #8b6343;
+  --accent: #222222;
+  --highlight: #cdd26a;
+  --selected: #aaa23a;
+  --danger: #cc3333;
+  --success: #2d8a2d;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Lato', Arial, sans-serif;
+}
+
+html, body {
+  height: 100%;
+  background: var(--white);
+  color: var(--black);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ─── Header ─── */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 32px;
+  background: var(--black);
+  color: var(--white);
+  border-bottom: 3px solid var(--board-dark);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.site-nav {
+  display: flex;
+  gap: 24px;
+}
+
+.site-nav a {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+}
+
+.site-nav a:hover { opacity: 1; }
+
+/* ─── Buttons ─── */
+.btn {
+  display: inline-block;
+  padding: 12px 28px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-align: center;
+}
+
+.btn-primary {
+  background: var(--black);
+  color: var(--white);
+  border-color: var(--black);
+}
+
+.btn-primary:hover {
+  background: var(--white);
+  color: var(--black);
+}
+
+.btn-secondary {
+  background: var(--white);
+  color: var(--black);
+  border-color: var(--black);
+}
+
+.btn-secondary:hover {
+  background: var(--black);
+  color: var(--white);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--black);
+  border-color: var(--black);
+}
+
+.btn-outline:hover {
+  background: var(--black);
+  color: var(--white);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: var(--white);
+  border-color: var(--danger);
+}
+
+.btn-danger:hover {
+  background: #aa1111;
+  border-color: #aa1111;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ─── Form Styles ─── */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  color: var(--gray-dark);
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid var(--gray-light);
+  background: var(--white);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--black);
+  outline: none;
+  transition: border-color 0.18s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--black);
+}
+
+.form-error {
+  color: var(--danger);
+  font-size: 0.82rem;
+  margin-top: 4px;
+  display: none;
+}
+
+.form-error.show { display: block; }
+
+/* ─── Card ─── */
+.card {
+  background: var(--white);
+  border: 2px solid var(--black);
+  padding: 32px;
+}
+
+/* ─── Footer ─── */
+.site-footer {
+  text-align: center;
+  padding: 18px;
+  background: var(--black);
+  color: var(--gray-mid);
+  font-size: 0.82rem;
+  letter-spacing: 0.5px;
+  margin-top: auto;
+}
+
+/* ─── Utility ─── */
+.text-center { text-align: center; }
+.mt-1 { margin-top: 8px; }
+.mt-2 { margin-top: 16px; }
+.mt-3 { margin-top: 24px; }
+.hidden { display: none !important; }
+
+/* ─── Modal ─── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-box {
+  background: var(--white);
+  border: 3px solid var(--black);
+  padding: 36px 40px;
+  min-width: 320px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+}
+
+.modal-box h2 {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+}
+
+.modal-box p {
+  margin-bottom: 20px;
+  color: var(--gray-dark);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ─── Toast ─── */
+#toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--black);
+  color: var(--white);
+  padding: 12px 28px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  border: 2px solid var(--board-dark);
+  transition: transform 0.3s ease;
+  z-index: 9999;
+  white-space: nowrap;
+}
+
+#toast.show {
+  transform: translateX(-50%) translateY(0);
+}
