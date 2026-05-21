@@ -11,6 +11,7 @@ function getSession() {
 }
 
 function setSession(data) {
+  localStorage.removeItem('chess_session');
   localStorage.setItem('chess_session', JSON.stringify(data));
 }
 
