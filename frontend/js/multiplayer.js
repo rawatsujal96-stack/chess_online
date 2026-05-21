@@ -59,19 +59,22 @@ async function createRoom() {
       body: JSON.stringify({ name: roomName, timeLimit: selectedCreateTime, hostColor: color })
     });
     const data = await res.json();
-    if (res.ok && data.roomId) {
-      window.location.href = `game.html?mode=online&room=${data.roomId}&color=${color}&time=${selectedCreateTime}`;
+   if (res.ok && data.roomId) {
+
+  window.location.href =
+  `game.html?mode=online&room=${data.roomId}&color=${color}&time=${selectedCreateTime}`;
+
+
     } else {
       showToast(data.message || 'Failed to create room');
     }
   } catch (e) {
-    // Offline fallback — simulate room creation
-    const roomId = 'room_' + Math.random().toString(36).slice(2, 8);
-    showToast(`Room created! (offline mode)`);
-    setTimeout(() => {
-      window.location.href = `game.html?mode=online&room=${roomId}&color=${color}&time=${selectedCreateTime}&offline=1`;
-    }, 600);
-  }
+
+  console.error(e);
+
+  showToast('Server connection failed');
+
+}
 }
 
 /* ── Refresh Room List ── */
