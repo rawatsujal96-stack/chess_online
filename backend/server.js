@@ -70,19 +70,54 @@ function authMiddleware(req, res, next) {
 /* ─── Auth Routes ─── */
 
 // Register
+
+
 app.post('/api/register', async (req, res) => {
+
   const { username, email, password } = req.body;
-  if (!username || !email || !password)
-    const emailRegex =
-/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-if (!emailRegex.test(email)) {
+  if (!username || !email || !password) {
 
-  return res.status(400).json({
-    message: 'Invalid email address'
-  });
+    return res.status(400).json({
+      message: 'All fields required'
+    });
 
-}
+  }
+
+  // EMAIL VALIDATION
+  const emailRegex =
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(email)) {
+
+    return res.status(400).json({
+      message: 'Invalid email address'
+    });
+
+  }
+
+  // STRONG PASSWORD
+  const strongPassword =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+  if (!strongPassword.test(password)) {
+
+    return res.status(400).json({
+      message:
+      'Password must contain uppercase, lowercase, number and minimum 8 characters'
+    });
+
+  }
+
+  if (users.has(username.toLowerCase())) {
+
+    return res.status(409).json({
+      message: 'Username already taken'
+    });
+
+  }
+
+});
     return res.status(400).json({ message: 'All fields required' });
   if (username.length < 3)
     return res.status(400).json({ message: 'Username must be at least 3 characters' });
