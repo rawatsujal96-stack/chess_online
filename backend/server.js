@@ -71,82 +71,56 @@ function authMiddleware(req, res, next) {
 
 // Register
 
-
 app.post('/api/register', async (req, res) => {
-
   const { username, email, password } = req.body;
 
-  if (!username || !email || !password) {
-
-    return res.status(400).json({
-      message: 'All fields required'
-    });
-
-  }
-
-  // EMAIL VALIDATION
-  const emailRegex =
-  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  if (!emailRegex.test(email)) {
-
-    return res.status(400).json({
-      message: 'Invalid email address'
-    });
-
-  }
-
-  // STRONG PASSWORD
-  const strongPassword =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-
-  if (!strongPassword.test(password)) {
-
-    return res.status(400).json({
-      message:
-      'Password must contain uppercase, lowercase, number and minimum 8 characters'
-    });
-
-  }
-
-  if (users.has(username.toLowerCase())) {
-
-    return res.status(409).json({
-      message: 'Username already taken'
-    });
-
-  }
-
-});
+  if (!username || !email || !password)
     return res.status(400).json({ message: 'All fields required' });
+
   if (username.length < 3)
     return res.status(400).json({ message: 'Username must be at least 3 characters' });
- const strongPassword =
-/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
-if (!strongPassword.test(password)) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email))
+    return res.status(400).json({ message: 'Invalid email address' });
 
-  return res.status(400).json({
-    message:
-      'Password must contain uppercase, lowercase, number and minimum 8 characters'
-  });
+  const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+  if (!strongPassword.test(password))
+    return res.status(400).json({
+      message: 'Password must contain uppercase, lowercase, number and minimum 8 characters'
+    });
 
-}
   if (users.has(username.toLowerCase()))
     return res.status(409).json({ message: 'Username already taken' });
 
+  const emailExists = [...users.values()].some(
+    u => u.email.toLowerCase() === email.toLowerCase()
+  );
+  if (emailExists)
+    return res.status(409).json({ message: 'Email already registered' });
+
   const passwordHash = await bcrypt.hash(password, 10);
-  users.set(username.toLowerCase(), { username, email, passwordHash, createdAt: Date.now(), wins: 0, losses: 0, draws: 0 });
+
+  users.set(username.toLowerCase(), {
+    username,
+    email,
+    passwordHash,
+    createdAt: Date.now(),
+    wins: 0,
+    losses: 0,
+    draws: 0
+  });
+
   const token = generateToken(username);
   res.json({ token, username, message: 'Account created' });
 });
-
+ 
 // Login
 app.post('/api/login', async (req, res) => {
   const { email , password } = req.body;
 
-  if (!username || !password)
-    return res.status(400).json({ message: 'Username and password required' });
+  if (!email || !password)
+    return res.status(400).json({ message: 'email and password required' });
 
   const user = [...users.values()].find(
   u => u.email === email
