@@ -20,12 +20,16 @@ class GameController {
     this.moveCount = { w: 0, b: 0 };
     this.soundEnabled = this.params.sound !== '0';
     this.socket = null;
+    this.socket = null;
 this.roomId = this.params.room || null;
 
     this.sounds.setEnabled(this.soundEnabled);
     if (this.params.diff) this.ai.setDifficulty(parseInt(this.params.diff));
 
     this._init();
+    if (this.mode === 'online') {
+  this.connectOnlineGame();
+}
   }
 
   _parseParams() {
@@ -44,6 +48,23 @@ this.roomId = this.params.room || null;
     this._setupTimers();
     this.gameActive = true;
     this.refreshBoard();
+    if (this.mode === 'online' && this.socket) {
+
+  const move =
+    this.engine.moveHistory[
+      this.engine.moveHistory.length - 1
+    ];
+
+  this.socket.send(JSON.stringify({
+    type: 'move',
+    move: {
+      from: move.fromNotation,
+      to: move.toNotation,
+      promotion: 'q'
+    }
+  }));
+
+}
     this._updateStatus();
 if (this.mode === 'online') {
   this._connectWebSocket();
@@ -450,6 +471,60 @@ if (this.mode === 'online') {
 }
 
   newGame() {
+    connectOnlineGame() {
+
+  const roomId = this.params.room;
+
+  const session =
+    JSON.parse(localStorage.getItem('chess_session'));
+
+  this.socket = new WebSocket(
+    location.origin.replace(/^http/, 'ws')
+  );
+
+  this.socket.onopen = () => {
+
+    console.log('Connected');
+
+    this.socket.send(JSON.stringify({
+      type: 'joinRoom',
+      roomId,
+      token: session.token
+    }));
+
+  };
+
+  this.socket.onmessage = (event) => {
+
+    const data = JSON.parse(event.data);
+
+    console.log(data);
+
+    // Opponent move received
+    if (data.type === 'opponentMove') {
+
+      this.engine.game.move(data.move);
+
+      this.refreshBoard();
+
+    }
+
+    // Game started
+    if (data.type === 'gameStart') {
+
+      showToast('Opponent Connected');
+
+    }
+
+  };
+
+  this.socket.onerror = () => {
+
+    showToast('WebSocket Error');
+
+  };
+
+}
     closeModal('gameOverModal');
     const params = new URLSearchParams(window.location.search);
     window.location.href = window.location.pathname + '?' + params.toString();
